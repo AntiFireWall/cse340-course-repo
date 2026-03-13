@@ -39,3 +39,55 @@ VALUES
 (3, 'Senior Tech Support Day', 'Helping elderly citizens navigate smartphones and video calling software.', 'Golden Age Home', '2026-05-05'),
 (3, 'Neighborhood Cleanup', 'Removing litter and graffiti from the historical district streets.', 'Old Town', '2026-05-30'),
 (3, 'Clothing Drive & Sort', 'Collecting and organizing seasonal attire for local families in need.', 'UnityServe Warehouse', '2026-06-20');
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(130) UNIQUE NOT NULL
+);
+
+INSERT INTO category (name)
+VALUES
+('Construction & Infrastructure'),
+('Agriculture & Environment'),
+('Education & Training'),
+('Basic Needs & Support');
+
+CREATE TABLE project_category (
+	project_id INT,
+	category_id INT,
+	PRIMARY KEY (project_id, category_id),
+	FOREIGN KEY (project_id) REFERENCES project(project_id),
+	FOREIGN KEY (category_id) REFERENCES category(category_id)
+);
+
+INSERT INTO project_category (project_id, category_id) VALUES
+-- Construction & Infrastructure (Category 1)
+(1, 1), -- Community Center Refurbishment
+(2, 1), -- Eco-Friendly Housing Pilot
+(3, 1), -- Park Bench Installation
+(4, 1), -- Roofing for Seniors
+(5, 1), -- School Playground Build
+(6, 1), -- Urban Rooftop Garden Setup (Construction part)
+(10, 1), -- Irrigation System Repair (Infrastructure)
+(14, 1), -- Neighborhood Cleanup (Maintenance/Infra)
+
+-- Agriculture & Environment (Category 2)
+(2, 2), -- Eco-Friendly Housing Pilot (Sustainability)
+(6, 2), -- Urban Rooftop Garden Setup (Gardening)
+(7, 2), -- Community Orchard Planting
+(8, 2), -- Organic Farming Workshop
+(9, 2), -- Seed Distribution Drive
+(10, 2), -- Irrigation System Repair (Agri)
+(14, 2), -- Neighborhood Cleanup (Environmental)
+
+-- Education & Training (Category 3)
+(8, 3), -- Organic Farming Workshop (Training)
+(12, 3), -- After-School Tutoring Program
+(13, 3), -- Senior Tech Support Day
+
+-- Basic Needs & Support (Category 4)
+(4, 4), -- Roofing for Seniors (Supporting vulnerable pops)
+(11, 4), -- Homeless Shelter Meal Service
+(13, 4), -- Senior Tech Support Day (Elderly Support)
+(15, 4); -- Clothing Drive & Sort
+
