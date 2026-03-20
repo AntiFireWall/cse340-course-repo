@@ -100,6 +100,30 @@ h2 {
     border-left: 5px solid var(--accent);
 }
 
+/* Category Tags */
+
+.category-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #f0f4f8;
+    color: #334e68;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    
+    /* The Shadow Part */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    /* Optional: subtle transition for hover effects */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* 5. Universal Footer */
 footer {
     background-color: var(--primary);

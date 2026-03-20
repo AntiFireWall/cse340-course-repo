@@ -3,11 +3,16 @@
     <h1><%= title %></h1>
 
     <h2><strong><%= projectDetails.title %></strong></h2>
+    <% projectDetails.category_list.forEach(category => { %>
+        <a class="category-tag" href="/category/<%= category.id %>"><%= category.name %></a>
+    <% }); %>
+
+
 
     <p>Description: <%= projectDetails.description %></p>
     <p>Project Date: <%= projectDetails.project_date %></p>
     <p>Project Location: <%= projectDetails.location %></p>
-    <p></p>
+    <br>
     <p>Organized By <a href="/organization/<%= projectDetails.organization_id %>"><%= projectDetails.organization_name %></a></p>
 
 </main>

@@ -4,7 +4,7 @@
         <h2>Available Service Categories</h2>
         <ol>
             <% categories.forEach(category => { %>
-                <li><strong><%= category.name %></strong></li>
+                <li><a href="/category/<%= category.category_id %>"><strong><%= category.name %></strong></a></li>
             <% }); %>
         </ol>
     </main>
