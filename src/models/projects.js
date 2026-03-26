@@ -77,30 +77,34 @@ const getUpcomingProjects = async (number_of_projects) => {
 
 const getProjectDetails = async (projectId) => {
       const query = `
-      SELECT
-          p.project_id,
-          p.organization_id,
-          o.name AS organization_name,
-          p.title,
-          p.description,
-          p.location,
-          p.project_date,
-          JSON_AGG(
-            JSON_BUILD_OBJECT('id', c.category_id, 'name', c.name)
-          ) AS category_list 
-      FROM project p
-      JOIN organization o ON p.organization_id = o.organization_id
-      JOIN project_category pc ON p.project_id = pc.project_id
-      JOIN category c ON pc.category_id = c.category_id
-      WHERE p.project_id = $1
-      GROUP BY 
-          p.project_id, 
-          p.organization_id, 
-          o.name, 
-          p.title, 
-          p.description, 
-          p.location, 
-          p.project_date;
+        SELECT 
+            p.project_id, 
+            p.organization_id, 
+            o.name AS organization_name, 
+            p.title, 
+            p.description, 
+            p.location, 
+            p.project_date, 
+            -- Use COALESCE to return an empty array [] instead of [null] when no categories exist
+            COALESCE(
+                JSON_AGG(
+                    JSON_BUILD_OBJECT('id', c.category_id, 'name', c.name)
+                ) FILTER (WHERE c.category_id IS NOT NULL), 
+                '[]'
+            ) AS category_list 
+        FROM project p 
+        JOIN organization o ON p.organization_id = o.organization_id 
+        LEFT JOIN project_category pc ON p.project_id = pc.project_id 
+        LEFT JOIN category c ON pc.category_id = c.category_id 
+        WHERE p.project_id = $1 
+        GROUP BY 
+            p.project_id, 
+            p.organization_id, 
+            o.name, 
+            p.title, 
+            p.description, 
+            p.location, 
+            p.project_date;
       `;
       
       const query_params = [projectId];
@@ -109,4 +113,25 @@ const getProjectDetails = async (projectId) => {
       return result.rows.length > 0 ? result.rows[0] : null;
 };
 
-export { getAllProjects, getProjectsByOrganizationId, getProjectsByCategoryId, getUpcomingProjects, getProjectDetails }  
+const createProject = async (title, description, location, project_date, organization_id) => {
+    const query = `
+      INSERT INTO project (organization_id, title, description, location, project_date)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING project_id
+    `;
+
+    const query_params = [organization_id, title, description, location, project_date];
+    const result = await db.query(query, query_params);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create project');
+    }
+
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Created new project with ID:', result.rows[0].project_id);
+    }
+
+    return result.rows[0].project_id;
+};
+
+export { getAllProjects, getProjectsByOrganizationId, getProjectsByCategoryId, getUpcomingProjects, getProjectDetails, createProject }  

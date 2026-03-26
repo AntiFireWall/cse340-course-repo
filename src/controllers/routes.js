@@ -1,9 +1,9 @@
 import express from 'express';
 
 import { showHomePage } from './index.js';
-import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm } from './organizations.js';
-import { showProjectsPage, showProjectPage } from './projects.js';
-import { showCategoriesPage, showCategoryPage } from './categories.js';
+import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm,  } from './organizations.js';
+import { showProjectsPage, showProjectPage, showNewProjectForm, processNewProjectForm, projectValidation } from './projects.js';
+import { showCategoriesPage, showCategoryPage, showAssignCategoriesForm, processAssignCategoriesForm } from './categories.js';
 import { testErrorPage } from './errors.js';
 
 const router = express.Router();
@@ -21,9 +21,16 @@ router.post('/new-organization', organizationValidation, processNewOrganizationF
 
 router.get('/projects', showProjectsPage);
 router.get('/project/:id', showProjectPage);
+// Route for new project page
+router.get('/new-project', showNewProjectForm);
+// Route to handle new project form submission
+router.post('/new-project', projectValidation, processNewProjectForm);
 
 router.get('/categories', showCategoriesPage);
 router.get('/category/:id', showCategoryPage);
+// Routes to handle the assign categories to project form
+router.get('/assign-categories/:projectId', showAssignCategoriesForm);
+router.post('/assign-categories/:projectId', processAssignCategoriesForm);
 
 // error-handling routes
 router.get('/test-error', testErrorPage);
