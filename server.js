@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './src/models/db.js';
 import router from './src/controllers/routes.js';
+import session from 'express-session';
+import flash from './src/middleware/flash.js';
 
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -16,6 +18,19 @@ const app = express();
 /**
   * Configure Express middleware
   */
+
+// Set up session management
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
+}));
+
+app.use(flash);
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));

@@ -15,6 +15,7 @@
 }
 
 body {
+    position: relative;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
     color: var(--text);
@@ -51,6 +52,49 @@ nav a {
 
 nav a:hover {
     color: var(--accent);
+}
+
+/* Flash message styles */
+#alert-containter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    height: fit-content;
+    width: 300px;
+    max-width: 90vw; 
+    padding: 10px;
+    max-width: 90vw; 
+}
+.alert {
+    width: fit-content;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.alert.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.alert.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.alert.warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+.alert.info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
 }
 
 /* 3. Main Content Wrapper */
@@ -122,6 +166,92 @@ h2 {
 .category-tag:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Form Style */
+
+form {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--light-grey);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--light-grey);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text);
+    transition: var(--transition);
+    outline: none;
+}
+
+/* Interaction States */
+input:focus, 
+select:focus, 
+textarea:focus {
+    border-color: var(--accent);
+    background-color: #f9fbf8; /* Very subtle mint tint */
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Buttons */
+button[type="submit"],
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background-color: #3e7a36; /* Slightly lighter than primary */
+    box-shadow: 0 4px 12px rgba(45, 90, 39, 0.2);
+    transform: translateY(-1px);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Helper Text */
+.form-help {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
 }
 
 /* 5. Universal Footer */
