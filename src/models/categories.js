@@ -62,4 +62,69 @@ const getCategoriesByServiceProjectId = async (projectId) => {
     return result.rows;
 };
 
-export { getAllCategories, getCategoryDetailes, getCategoriesByServiceProjectId, updateCategoryAssignments }  
+const createCategory = async (categoryName) => {
+    const query = `
+        INSERT INTO category (name)
+        VALUES ($1)
+        RETURNING category_id;
+    `;
+
+    const query_params = [categoryName];
+    const result = await db.query(query, query_params);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create category');
+    }
+
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Created new category with ID:', result.rows[0].category_id);
+    }
+
+    return result.rows[0].category_id;
+};
+
+const updateCategory = async (categoryName, categoryId) => {
+    const query = `
+      UPDATE category
+      SET name = $1
+      WHERE category_id = $2
+      RETURNING category_id;
+    `;
+
+    const query_params = [categoryName, categoryId];
+    const result = await db.query(query, query_params);
+
+    if (result.rows.length === 0) {
+      throw new Error('Category not found');
+    }
+
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+      console.log('Updated category with ID:', categoryId);
+    }
+
+    return result.rows[0].category_id;
+};
+
+const categoryExists = async (categoryName, excludeId) => {
+    let query = `
+        SELECT
+          name
+        FROM category
+        WHERE name = $1 
+        `;
+
+    const query_params = [categoryName];
+
+    if (excludeId) {
+        query += ` AND category_id != $2`;
+        query_params.push(excludeId);
+    } else {
+        
+    }
+
+    const result = await db.query(query, query_params);
+
+    return result.rows.length > 0;
+};
+
+export { getAllCategories, getCategoryDetailes, getCategoriesByServiceProjectId, updateCategoryAssignments, createCategory, updateCategory, categoryExists }  
