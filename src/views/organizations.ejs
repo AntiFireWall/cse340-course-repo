@@ -7,6 +7,8 @@
                 <li><a href="/organization/<%= organization.organization_id %>"><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo"><strong><%= organization.name %></strong>: <%= organization.contact_email %></a></li>
             <% }); %>
         </ul>
-        <p><a href="/new-organization">Add a new organization</a></p>
+        <% if (user && user.role_name === 'admin') { %>
+            <p><a href="/new-organization">Add a new organization</a></p>
+        <% } %>
     </main>
 <%- include('partials/footer') %>

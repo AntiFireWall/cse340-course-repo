@@ -3,7 +3,9 @@
     <h1><%= title %></h1>
 
     <h2><strong><%= projectDetails.title %></strong></h2>
-        <a class="category-tag" href="/assign-categories/<%= projectDetails.project_id %>"> ✎ Edit Categories</a>
+        <% if (user && user.role_name === 'admin') { %>
+            <a class="category-tag" href="/assign-categories/<%= projectDetails.project_id %>"> ✎ Edit Categories</a>
+        <% } %>
     <% projectDetails.category_list.forEach(category => { %>
         <a class="category-tag" href="/category/<%= category.id %>"><%= category.name %></a>
     <% }); %>
@@ -15,7 +17,9 @@
     <p>Project Location: <%= projectDetails.location %></p>
     <br>
     <p>Organized By <a href="/organization/<%= projectDetails.organization_id %>"><%= projectDetails.organization_name %></a></p>
-    <p><a href="/edit-project/<%= projectDetails.project_id %>">Edit Project Details</a></p>
-
+    
+    <% if (user && user.role_name === 'admin') { %>
+        <p><a href="/edit-project/<%= projectDetails.project_id %>">Edit Project Details</a></p>
+    <% } %>    
 </main>
 <%- include('partials/footer') %>
