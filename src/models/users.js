@@ -23,6 +23,22 @@ const createUser = async (name, email, passwordHash, ) => {
     return result.rows[0].user_id;
 };
 
+const getUsersList = async () => {
+    const query = `
+        SELECT u.name, u.email, r.role_name 
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+    `;
+    
+    const result = await db.query(query);
+
+    if (result.rows.length === 0) {
+        return null; // User not found
+    }
+    
+    return result.rows;
+};
+
 const findUserByEmail = async (email) => {
     const query = `
         SELECT u.user_id, u.name, u.email, u.password_hash, r.role_name 
@@ -62,4 +78,4 @@ const authenticateUser = async (email, password) => {
     return null;
 };
 
-export { createUser, authenticateUser };
+export { createUser, authenticateUser, getUsersList };

@@ -297,6 +297,20 @@ input[type="checkbox"] {
     display: block;
 }
 
+/* Table */
+
+table {
+    border-collapse: collapse;
+    border-style: hidden;
+}
+
+th, td {
+    text-align: center;
+    width: 250px;
+    border: 1px solid black;   /* Applies borders to all cells */
+    padding: 15px;
+}
+
 /* 5. Universal Footer */
 footer {
     background-color: var(--primary);

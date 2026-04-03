@@ -4,7 +4,7 @@ import { showHomePage } from './index.js';
 import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm } from './organizations.js';
 import { showProjectsPage, showProjectPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './projects.js';
 import { showCategoriesPage, showCategoryPage, showAssignCategoriesForm, processAssignCategoriesForm, categoryValidation, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm  } from './categories.js';
-import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole } from './users.js';
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showUsersList } from './users.js';
 import { testErrorPage } from './errors.js';
 
 const router = express.Router();
@@ -37,13 +37,14 @@ router.post('/new-category', requireRole('admin'), categoryValidation, processNe
 router.get('/edit-category/:id', requireRole('admin'), showEditCategoryForm);
 router.post('/edit-category/:id', requireRole('admin'), categoryValidation, processEditCategoryForm);
 
-// Registration Routes
+// User Routes
 router.get('/register', showUserRegistrationForm);
 router.post('/register', processUserRegistrationForm);
 router.get('/login', showLoginForm);
 router.post('/login', processLoginForm);
 router.get('/logout', processLogout);
 router.get('/dashboard', requireLogin, showDashboard);
+router.get('/users', requireRole('admin', '/dashboard'), showUsersList);
 
 // Error-handling Routes
 router.get('/test-error', testErrorPage);

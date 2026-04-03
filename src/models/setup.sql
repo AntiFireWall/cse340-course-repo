@@ -110,8 +110,4 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     role_id INTEGER REFERENCES roles(role_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-); 
-
-SELECT u.user_id, u.name, u.email, u.password_hash, r.role_name, r.role_description
-FROM users u
-JOIN roles r ON u.role_id = r.role_id;
+);
