@@ -101,8 +101,6 @@ INSERT INTO roles (role_name, role_description) VALUES
     ('user', 'Standard user with basic access'),
     ('admin', 'Administrator with full system access');
 
-SELECT * FROM roles;
-
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -110,4 +108,12 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     role_id INTEGER REFERENCES roles(role_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE project_users (
+	project_id INT,
+	user_id INT,
+	PRIMARY KEY (project_id, user_id),
+	FOREIGN KEY (project_id) REFERENCES project(project_id),
+	FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

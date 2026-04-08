@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
-import { createUser, authenticateUser, getUsersList } from '../models/users.js';
+import { createUser, authenticateUser, getUsersList, registerUserToProject, unregisterUserFromProject } from '../models/users.js';
+import { getProjectsByUserId } from '../models/projects.js';
 
 const showUserRegistrationForm = (req, res) => {
     const title = 'Register';
@@ -87,13 +88,11 @@ const requireRole = (role, redirect = '/') => {
     next();
 }}; 
 
-const showDashboard = (req, res) => {
+const showDashboard = async (req, res) => {
     const user = req.session.user;
-    res.render('dashboard', { 
-        title: 'Dashboard',
-        name: user.name,
-        email: user.email
-    });
+    const title = 'Dashboard';
+    const volunteeredProjects = await getProjectsByUserId(user.user_id); 
+    res.render('dashboard', { title, user, volunteeredProjects });
 };
 
 const showUsersList = async (req, res) => {
@@ -101,6 +100,38 @@ const showUsersList = async (req, res) => {
     const usersListDetails = await getUsersList();
 
     res.render('users', { title, usersListDetails });
-}
+};
 
-export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showUsersList };
+const processUserToProjectRegistration = async (req, res) => {
+    const userId = req.session.user.user_id;
+    const { project_id } = req.body;
+
+    try {
+        await registerUserToProject(userId, project_id);
+
+        req.flash('success', 'You have successfully volunteered!');
+        res.redirect(`/project/${project_id}`);
+    } catch (error) {
+        console.error('Error volunteering the user:', error);
+        req.flash('error', 'An error occurred during volunteering process. Please try again.');
+        res.redirect(`/project/${project_id}`);
+    }
+};
+
+const processUserFromProjectUnregistration = async (req, res) => {
+    const userId = req.session.user.user_id;
+    const { project_id } = req.body;
+
+    try {
+        await unregisterUserFromProject(userId, project_id);
+
+        req.flash('success', 'You have successfully left the project!');
+        res.redirect(`/project/${project_id}`);
+    } catch (error) {
+        console.error('Error unvolunteering the user from project:', error);
+        req.flash('error', 'An error occurred during unregistering from project process. Please try again.');
+        res.redirect(`/project/${project_id}`);
+    }
+};
+
+export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showUsersList, processUserToProjectRegistration, processUserFromProjectUnregistration };

@@ -20,6 +20,27 @@
     
     <% if (user && user.role_name === 'admin') { %>
         <p><a href="/edit-project/<%= projectDetails.project_id %>">Edit Project Details</a></p>
-    <% } %>    
+    <% } %>  
+    
+    <% if (user) { %>
+            <% if (!userIsVolunteered) { %>
+                    <form class="leaveProject" action="/process-registration" method="POST" style="margin-top: 10px;">
+                        <input type="hidden" name="project_id" value="<%= projectDetails.project_id %>">
+                    
+                        <button type="submit" class="category-tag" style="background-color: #8eb486; color: #ffffff; border: 1px solid #8eb486; cursor: pointer;">
+                            Volunteer Now
+                        </button>
+                    </form>
+            <% } else { %>  
+                    <p style="margin-top: 10px;">You are volunteering for this project!</p>
+                    <form class="leaveProject" action="/process-unregistration" method="POST" style="margin-top: 3px;" onsubmit="return confirm('Are you sure you want to leave this project?');">
+                        <input type="hidden" name="project_id" value="<%= projectDetails.project_id %>">
+
+                        <button type="submit" class="category-tag" style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; cursor: pointer;">
+                            Leave Project
+                        </button>
+                    </form>
+            <% } %>
+    <% } %>   
 </main>
 <%- include('partials/footer') %>

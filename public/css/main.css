@@ -47,11 +47,30 @@ nav a {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 0.9rem;
+    position: relative; /* Required for the underline position */
+    padding: 4px 0;
     transition: var(--transition);
+}
+
+/* The animated underline */
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--accent);
+    transition: all 0.3s ease-in-out;
+    transform: translateX(-50%);
 }
 
 nav a:hover {
     color: var(--accent);
+}
+
+nav a:hover::after {
+    width: 100%;
 }
 
 /* Flash message styles */
@@ -120,6 +139,21 @@ h2 {
     font-weight: 400;
 }
 
+main a:not(.btn-primary, .category-tag) {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid var(--accent);
+    transition: var(--transition);
+}
+
+main a:not(.btn-primary, .category-tag):hover {
+    background-color: var(--light-grey);
+    border-bottom-color: var(--primary);
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
 /* 4. Subpage Elements (Tables, Grids, Images) */
 .main-logo {
     display: block;
@@ -148,24 +182,24 @@ h2 {
 
 .category-tag {
     display: inline-block;
-    padding: 4px 12px;
-    background-color: #f0f4f8;
-    color: #334e68;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    padding: 6px 16px;
+    background-color: var(--light-grey);
+    color: var(--primary);
+    border-radius: 50px; /* Fully rounded pill shape */
+    font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none;
-    
-    /* The Shadow Part */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    
-    /* Optional: subtle transition for hover effects */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #e0e6df;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
 }
 
 .category-tag:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) scale(1.05);
+    background-color: var(--accent);
+    color: var(--white);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent);
 }
 
 /* Form Style */
@@ -309,6 +343,48 @@ th, td {
     width: 250px;
     border: 1px solid black;   /* Applies borders to all cells */
     padding: 15px;
+}
+
+/* Leavce Project Form */
+
+.leaveProject {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    background: none;      /* Remove the white background from your global form style */
+    border: none;          /* Remove the border from your global form style */
+    box-shadow: none;      /* Remove the shadow */
+    width: auto;           /* Don't let it take up the full width */
+}
+
+.leaveProject button {
+    background-color: transparent;
+    color: #d9534f;         /* Standard 'danger' red */
+    padding: 6px 12px;
+    border: 1px solid #d9534f;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    width: auto;            /* Override the 100% width in your global button style */
+}
+
+.leaveProject button:hover {
+    background-color: #d9534f;
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(217, 83, 79, 0.3);
+    transform: translateY(-1px);
+}
+
+.leaveProject button:active {
+    transform: translateY(0);
+}
+
+.action-cell {
+    width: 120px; /* Very narrow for just a small button */
+    padding: 10px;
 }
 
 /* 5. Universal Footer */

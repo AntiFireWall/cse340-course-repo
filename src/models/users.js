@@ -57,6 +57,45 @@ const findUserByEmail = async (email) => {
     return result.rows[0];
 };
 
+const registerUserToProject = async (userId, projectId) => {
+    const query = `
+        INSERT INTO project_users (project_id, user_id) 
+        VALUES ($1, $2)
+    `;
+    const query_params = [ projectId, userId ];
+    
+    const result = await db.query(query, query_params);
+    
+    return result.rows[0];
+};
+
+const unregisterUserFromProject = async (userId, projectId) => {
+    const query = `
+        DELETE FROM project_users 
+        WHERE project_id = $1 AND user_id = $2;
+    `;
+    const query_params = [ projectId, userId ];
+    
+    const result = await db.query(query, query_params);
+    
+    return result.rows[0];
+};
+
+const isVolunteered = async (userId, projectId) => {
+    const query = `
+        SELECT EXISTS (
+            SELECT 1 
+            FROM project_users 
+            WHERE user_id = $1 AND project_id = $2
+        ) AS "isVolunteered";
+    `;
+    const query_params = [ userId, projectId ];
+    
+    const result = await db.query(query, query_params);
+    
+    return result.rows[0].isVolunteered;
+};
+
 const verifyPassword = async (password, passwordHash) => {
     return bcrypt.compare(password, passwordHash);
 };
@@ -78,4 +117,4 @@ const authenticateUser = async (email, password) => {
     return null;
 };
 
-export { createUser, authenticateUser, getUsersList };
+export { createUser, authenticateUser, getUsersList, registerUserToProject, unregisterUserFromProject, isVolunteered };

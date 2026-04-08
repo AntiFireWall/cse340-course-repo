@@ -1,6 +1,7 @@
 import { getAllProjects, getUpcomingProjects, getProjectDetails, createProject, updateProject } from "../models/projects.js";
 import { getAllOrganizations } from "../models/organizations.js";
 import { body, validationResult } from 'express-validator';
+import { isVolunteered } from '../models/users.js';
 
 // title, description, location, date, organizationId
 const projectValidation = [
@@ -37,7 +38,13 @@ const showProjectPage = async (req, res) => {
     const projectDetails = await getProjectDetails(projectId);
     const title = 'Project Details';
 
-    res.render('project', {title, projectDetails});
+    let userIsVolunteered = false;
+
+    if (req.session && req.session.user) {
+        userIsVolunteered = await isVolunteered(req.session.user.user_id, projectId);
+    }
+
+    res.render('project', {title, projectDetails, userIsVolunteered});
 };
 
 const showNewProjectForm = async (req, res) => {
